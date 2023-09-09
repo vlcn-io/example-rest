@@ -7,7 +7,7 @@ import fastifyStatic from "@fastify/static";
 import * as url from "url";
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
-const PORT = parseInt(process.env.PORT || "8080");
+const PORT = 8081;
 
 // Create our Fastify server
 const app = Fastify({

@@ -150,5 +150,5 @@ function getSchemaPath(schemaName: string) {
 }
 
 function hasPathParts(s: string) {
-  return s.includes("..") || s.includes("/") || s.includes("\\");
+  return s.includes("..") || s.includes("/") || s.includes("\\") || s.includes("service-db");
 }
