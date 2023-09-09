@@ -9,10 +9,11 @@ const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 const PORT = parseInt(process.env.PORT || "8080");
 
+// Create our Fastify server
 const app = Fastify({
   logger: true,
 });
-await app.register(cors);
+// Add a parser to handle binary data sent by the client
 app.addContentTypeParser(
   "application/octet-stream",
   { parseAs: "buffer" },
@@ -27,12 +28,22 @@ app.addContentTypeParser(
     }
   }
 );
+
+// If we're in production, serve the static files from the dist folder
 if (process.env.NODE_ENV === "production") {
   await app.register(fastifyStatic, {
     root: path.join(__dirname, "dist"),
   });
+} else {
+  // If we're not in production, vite is serving our files and the server is accessed
+  // across origins.
+  await app.register(cors);
 }
 
+/**
+ * Endpoint that clients can call to `get` or `pull` changes
+ * from the server.
+ */
 app.get<{
   Params: { room: string };
   Querystring: {
@@ -51,10 +62,6 @@ app.get<{
     const requestorSiteId = hexToBytes(req.query.requestor as string);
     const sinceVersion = BigInt(req.query.since as string);
 
-    console.log(
-      `Asked for changes since: ${sinceVersion} requestor: ${requestorSiteId}`
-    );
-
     const changes = db.getChanges(sinceVersion, requestorSiteId);
     const encoded = encode({
       _tag: tags.Changes,
@@ -71,6 +78,9 @@ app.get<{
   }
 });
 
+/**
+ * Endpoint for clients to post their database changes to.
+ */
 app.post<{
   Params: { room: string };
   Querystring: { schemaName: string; schemaVersion: string };
@@ -80,16 +90,11 @@ app.post<{
   },
   handler: async (req, res) => {
     const data = new Uint8Array((req.body as any).raw);
-    console.log(data);
 
     const msg = decode(data);
     if (msg._tag != tags.Changes) {
       throw new Error(`Expected Changes message but got ${msg._tag}`);
     }
-    console.log(
-      `Received ${msg.changes.length} changes from ${msg.sender} for ${req.params.room}.
-      Schema ${req.query.schemaName} version ${req.query.schemaVersion}`
-    );
 
     const db = await createDb(
       req.params.room,

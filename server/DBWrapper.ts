@@ -6,25 +6,34 @@ import fs from "fs";
 const DB_FOLDER = "./dbs";
 const SCHEMA_FOLDER = "./src/schemas";
 
+/**
+ * - Initializes SQLite
+ * - Loads the cr-sqlite extension
+ * - Exposes `push` and `pull` changes statements
+ * 
+ */
 class DBWrapper {
-  #db;
+  readonly #db;
+  readonly #getChangesStmt;
+  readonly #applyChangesStmt;
+
   constructor(db: Database.Database) {
     this.#db = db;
+    this.#getChangesStmt = this.#db
+    .prepare(
+      `SELECT "table", "pk", "cid", "val", "col_version", "db_version", NULL, "cl", "seq" FROM crsql_changes WHERE db_version > ? AND site_id IS NOT ?`
+    )
+    .raw(true)
+    .safeIntegers();
+    this.#applyChangesStmt = this.#db.prepare(
+      `INSERT INTO crsql_changes
+        ("table", "pk", "cid", "val", "col_version", "db_version", "site_id", "cl", "seq")
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    );
   }
 
   getChanges(sinceVersion: bigint, requestorSiteId: Uint8Array): Change[] {
-    const ret = this.#db
-      .prepare(
-        `SELECT "table", "pk", "cid", "val", "col_version", "db_version", NULL, "cl", "seq" FROM crsql_changes WHERE db_version > ? AND site_id IS NOT ?`
-      )
-      .raw(true)
-      .safeIntegers()
-      .all(sinceVersion, requestorSiteId) as any;
-
-    for (const c of ret) {
-      c[8] = Number(c[8]);
-    }
-    return ret as Change[];
+    return this.#getChangesStmt.all(sinceVersion, requestorSiteId) as any;
   }
 
   getId(): Uint8Array {
@@ -35,14 +44,9 @@ class DBWrapper {
   }
 
   applyChanges(msg: Changes) {
-    const stmt = this.#db.prepare(
-      `INSERT INTO crsql_changes
-        ("table", "pk", "cid", "val", "col_version", "db_version", "site_id", "cl", "seq")
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    );
     this.#db.transaction((msg) => {
       for (const c of msg.changes) {
-        stmt.run(c[0], c[1], c[2], c[3], c[4], c[5], msg.sender, c[7], c[8]);
+        this.#applyChangesStmt.run(c[0], c[1], c[2], c[3], c[4], c[5], msg.sender, c[7], c[8]);
       }
     })(msg);
   }
@@ -52,11 +56,16 @@ class DBWrapper {
   }
 }
 
-// NOTE:
-// In an ideal world, you should cache the DB instance so you do not need to pay
-// the cost of re-constructing it (initializing SQLite, loading the cr-sqlite extension) every request.
-// You should also prepare the statements once and cache them in that world.
-// That is how the websocket and direct-connect servers work.
+/**
+ * Note: In a production environment, you should cache the DB instance and
+ * so you can re-use it between requests. Reconstructing SQLite and 
+ * re-preparing statements every request is non-trivial.
+ * 
+ * @param room 
+ * @param requestedSchemaName 
+ * @param requestedVersion 
+ * @returns DBWrapper
+ */
 export async function createDb(
   room: string,
   requestedSchemaName: string,
