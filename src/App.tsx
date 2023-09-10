@@ -39,6 +39,7 @@ function App({ room }: { room: string }) {
   const pushChanges = async () => {
     setPushPullTime(new Date());
     try {
+      setPushPullMsg(`Pushing changes...`);
       const num = (await syncer?.pushChanges()) || 0;
       setPushPullMsg(`Pushed ${num} changes`);
     } catch (e: any) {
@@ -48,6 +49,7 @@ function App({ room }: { room: string }) {
   const pullChanges = async () => {
     setPushPullTime(new Date());
     try {
+      setPushPullMsg(`Pulling changes...`);
       const num = (await syncer?.pullChanges()) || 0;
       setPushPullMsg(`Pulled ${num} changes`);
     } catch (e: any) {

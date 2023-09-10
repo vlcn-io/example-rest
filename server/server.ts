@@ -54,11 +54,22 @@ app.get<{
     since: string;
   };
 }>("/changes/:room", async (req, res) => {
-  const db = await createDb(
-    req.params.room,
-    req.query.schemaName as string,
-    BigInt(req.query.schemaVersion as string)
-  );
+  let db;
+  try {
+    db = await createDb(
+      req.params.room,
+      req.query.schemaName as string,
+      BigInt(req.query.schemaVersion as string)
+    );
+  } catch (e: any) {
+    if (e.code === "SQLITE_IOERR_WRITE") {
+      res.status(400).send("Push changes first to create or migrate the DB on the server.");
+      return;
+    }
+    
+    throw e;
+  }
+  
   try {
     const requestorSiteId = hexToBytes(req.query.requestor as string);
     const sinceVersion = BigInt(req.query.since as string);
