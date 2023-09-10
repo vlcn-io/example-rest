@@ -1,29 +1,29 @@
-# fly.toml app configuration file generated for vite-starter on 2023-06-01T10:35:47-04:00
+# fly.toml app configuration file generated for vlcn-rest-litefs on 2023-09-09T20:16:05-04:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
 app = "vlcn-rest-litefs"
-primary_region = "atl"
+primary_region = "iad"
 kill_signal = "SIGINT"
 kill_timeout = "5s"
 
 [experimental]
   auto_rollback = true
 
+[build]
+
 [env]
   PORT = "8080"
-  PRIMARY_REGION = "atl"
+  PRIMARY_REGION = "iad"
 
 [[mounts]]
-  destination = "/var/lib/litefs"
-  encrypted = false
-  processes = []
   source = "litefs"
+  destination = "/var/lib/litefs"
 
 [[services]]
   protocol = "tcp"
-  internal_port = 8080
+  internal_port = 3000
   processes = ["app"]
 
   [[services.ports]]
@@ -43,4 +43,3 @@ kill_timeout = "5s"
     interval = "15s"
     timeout = "2s"
     grace_period = "1s"
-    restart_limit = 0

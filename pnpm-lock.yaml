@@ -12,8 +12,8 @@ dependencies:
     specifier: ^6.11.0
     version: 6.11.0
   '@vlcn.io/crsqlite':
-    specifier: link:../cr-sqlite/core
-    version: link:../cr-sqlite/core
+    specifier: 0.15.0
+    version: 0.15.0
   '@vlcn.io/crsqlite-wasm':
     specifier: 0.15.1
     version: 0.15.1
@@ -885,6 +885,11 @@ packages:
       '@vlcn.io/wa-sqlite': 0.21.0
       '@vlcn.io/xplat-api': 0.14.1
       async-mutex: 0.4.0
+    dev: false
+
+  /@vlcn.io/crsqlite@0.15.0:
+    resolution: {integrity: sha512-x76W0L9I152SrABbvxFQ/5zOpFNi2YSH7WTGMLFHclcutWiigP7uwXNrPEIpAp4dMhlFJAj2Ge2IbcJX87XdJQ==}
+    requiresBuild: true
     dev: false
 
   /@vlcn.io/react@3.0.3-next.0(react@18.2.0):

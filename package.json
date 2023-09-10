@@ -7,13 +7,13 @@
     "dev:ui": "vite",
     "dev:server": "tsc -p ./tsconfig.server.json; node ./dist-server/server.js",
     "start": "NODE_ENV=production node ./dist-server/server.js",
-    "build": "tsc && vite build",
+    "build": "tsc; tsc -p ./tsconfig.server.json; vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "@fastify/cors": "^8.3.0",
     "@fastify/static": "^6.11.0",
-    "@vlcn.io/crsqlite": "link:../cr-sqlite/core",
+    "@vlcn.io/crsqlite": "0.15.0",
     "@vlcn.io/crsqlite-wasm": "0.15.1",
     "@vlcn.io/react": "3.0.3-next.0",
     "@vlcn.io/rx-tbl": "0.14.1",
