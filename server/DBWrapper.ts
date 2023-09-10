@@ -83,6 +83,7 @@ export async function createDb(
   // as auto-migration has it limitations.
   const schemaVersion = db
     .prepare(`SELECT value FROM crsql_master WHERE key = ?`)
+    .safeIntegers()
     .pluck()
     .get("schema_version");
   const schemaName = db
@@ -101,6 +102,7 @@ export async function createDb(
   if (schemaName == requestedSchemaName && requestedVersion == schemaVersion) {
     return new DBWrapper(db);
   }
+  console.log(`Mismatch schema version. Requested ${requestedSchemaName} v${requestedVersion} but found ${schemaName} v${schemaVersion}`);
 
   const content = await fs.promises.readFile(
     getSchemaPath(requestedSchemaName),

@@ -1,6 +1,6 @@
 # example-rest
 
-While a streaming WebSocket server does exist, the simplicity of rest provides a great example of how to start rolling your own `cr-sqlite` server and networking code.
+While a streaming [WebSocket server exists](https://github.com/vlcn-io/vite-starter/blob/main/server.js#L37), the simplicity of rest provides a easier to grasp example of how to network cr-sqlite databases.
 
 # server/server.ts
 
@@ -61,3 +61,36 @@ function App({ctx}) {
   );
 }
 ```
+
+## Syncer implementation
+
+The Syncer.ts file also provides a decent example of how to use `crsql_changes` to merge databases.
+
+It's about ~150 lines but there are only 4 key points:
+
+1. A `last-sent-to-[server-room]` state
+2. A `last-seen-from-[server-room]` state
+3. A select changesets statement
+4. An insert changesets statement
+
+
+## Last Sent To State
+
+Every change to a `cr-sqlite` database increases the version number of that database.
+
+To ensure we only send deltas when syncing, we track the last database version we sent to the server and only send changes that occurred after that version.
+
+> Note: if we want to sync a single db to many rooms then we need to track last sent by dbid.
+
+### Select Changesets Statement
+
+The select changesets statement is used to pull what has changed from the DB.
+
+```sql
+`SELECT "table", "pk", "cid", "val", "col_version", "db_version", "site_id", "cl", "seq" FROM crsql_changes WHERE db_version > ? AND site_id IS NULL`
+```
+
+- The `site_id IS NULL` check ensure we only grab local updates from the database
+- The `db_version > ?` ensures we only pull a delta from the database
+
+The parameter used for the `db_version` is that v
