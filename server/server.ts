@@ -31,8 +31,9 @@ app.addContentTypeParser(
 
 // If we're in production, serve the static files from the dist folder
 if (process.env.NODE_ENV === "production") {
+  console.log('serving static files');
   await app.register(fastifyStatic, {
-    root: path.join(__dirname, "dist"),
+    root: path.join(__dirname, '..', "dist"),
   });
 } else {
   // If we're not in production, vite is serving our files and the server is accessed
