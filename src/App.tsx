@@ -53,7 +53,8 @@ function App({ room }: { room: string }) {
       const num = (await syncer?.pullChanges()) || 0;
       setPushPullMsg(`Pulled ${num} changes`);
     } catch (e: any) {
-      setPushPullMsg(`Err pulling: ${e.message}`);
+      console.log(e);
+      setPushPullMsg(`Err pulling: ${e.message || e}`);
     }
   };
 
@@ -110,7 +111,8 @@ function App({ room }: { room: string }) {
             </button>
           </div>
           <div className="push-pull-msg">
-            {pushPullMsg}{" "}
+            {pushPullMsg}
+            <div>
             {pushPullTime ? (
               <ReactTimeAgo
                 date={pushPullTime}
@@ -118,6 +120,7 @@ function App({ room }: { room: string }) {
                 timeStyle="round"
               />
             ) : null}
+            </div>
           </div>
         </div>
         <p>

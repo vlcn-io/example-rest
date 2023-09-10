@@ -62,7 +62,6 @@ app.get<{
       BigInt(req.query.schemaVersion as string)
     );
   } catch (e: any) {
-    console.log('Receive error', e);
     if (e.code === "SQLITE_IOERR_WRITE" || e.message?.includes("readonly database")) {
       res.status(400).send("Push changes first to create or migrate the DB on the server.");
       return;

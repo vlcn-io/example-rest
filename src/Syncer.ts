@@ -85,7 +85,8 @@ class Syncer {
 
     const response = await fetch(endpoint);
     if (!response.ok) {
-      throw new Error(`Failed to pull changes: ${response.status}`);
+      const txt = await response.text();
+      throw new Error(`${txt}`);
     }
     const msg = decode(new Uint8Array(await response.arrayBuffer()));
     if (msg._tag !== tags.Changes) {
