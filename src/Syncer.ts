@@ -30,7 +30,7 @@ class Syncer {
     // track what we last sent to the server so we only send the diff.
     const lastSentVersion = BigInt(
       localStorage.getItem(
-        `last-sent-to-${this.#args.endpoint}-${this.#args.room}`
+        `${this.#args.db.siteid}-last-sent-to-${this.#args.endpoint}-${this.#args.room}`
       ) ?? "0"
     );
     // gather our changes to send to the server
@@ -63,7 +63,7 @@ class Syncer {
     // so next sync will be a delta.
     if (response.ok) {
       localStorage.setItem(
-        `last-sent-to-${this.#args.endpoint}-${this.#args.room}`,
+        `${this.#args.db.siteid}-last-sent-to-${this.#args.endpoint}-${this.#args.room}`,
         changes[changes.length - 1][5].toString(10)
       );
     }
@@ -74,7 +74,7 @@ class Syncer {
   async pullChanges() {
     const lastSeenVersion = BigInt(
       localStorage.getItem(
-        `last-seen-from-${this.#args.endpoint}-${this.#args.room}`
+        `${this.#args.db.siteid}-last-seen-from-${this.#args.endpoint}-${this.#args.room}`
       ) ?? "0"
     );
     const endpoint =
@@ -118,7 +118,7 @@ class Syncer {
     // Record that we've seen up to the given db version from the server
     // so next sync will be a delta.
     localStorage.setItem(
-      `last-seen-from-${this.#args.endpoint}-${this.#args.room}`,
+      `${this.#args.db.siteid}-last-seen-from-${this.#args.endpoint}-${this.#args.room}`,
       msg.changes[msg.changes.length - 1][5].toString(10)
     );
 

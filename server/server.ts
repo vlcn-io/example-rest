@@ -63,7 +63,7 @@ app.get<{
     );
   } catch (e: any) {
     if (e.code === "SQLITE_IOERR_WRITE" || e.message?.includes("readonly database")) {
-      res.status(400).send("Push changes first to create or migrate the DB on the server.");
+      res.status(400).send("make and push changes first to create or migrate the DB on the server.");
       return;
     }
     
