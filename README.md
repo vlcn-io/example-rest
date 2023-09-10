@@ -1,5 +1,17 @@
 # example-rest
 
+[Live example - https://vlcn-rest-litefs.fly.dev](https://vlcn-rest-litefs.fly.dev/)
+
+Running locally:
+
+```shell
+git clone git@github.com:vlcn-io/example-rest.git
+cd example-rest
+npm install
+npm dev:ui
+npm dev:server
+```
+
 While a streaming [WebSocket server exists](https://github.com/vlcn-io/vite-starter/blob/main/server.js#L37), a REST implementations provides a easier to grasp example of how to network cr-sqlite databases.
 
 # [server/server.ts](https://github.com/vlcn-io/example-rest/blob/main/server/server.ts)
