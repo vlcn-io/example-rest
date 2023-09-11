@@ -53,7 +53,7 @@ export default function DynamicTable({
   ).data;
   const data = useQuery<{ id: UniqueIdentifier }>(
     ctx,
-    `SELECT * FROM ${tableName} ORDER BY position ASC`
+    `SELECT * FROM ${tableName} ORDER BY position, id ASC`
   ).data;
 
   const columns: Column<any>[] = useMemo(() => {

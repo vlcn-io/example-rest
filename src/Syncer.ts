@@ -158,17 +158,20 @@ export default async function createSyncer(
   const schemaVersion = BigInt(
     firstPick<number | bigint>(
       await db.execA<[number | bigint]>(
-        `SELECT value FROM crsql_master WHERE key = 'schema_version'`
+        /*sql*/ `SELECT value FROM crsql_master WHERE key = 'schema_version'`
       )
     ) || -1
   );
   const [pullChangesetStmt, applyChangesetStmt] = await Promise.all([
-    db.prepare(
-      `SELECT "table", "pk", "cid", "val", "col_version", "db_version", "site_id", "cl", "seq" FROM crsql_changes WHERE db_version > ? AND site_id IS NULL`
-    ),
-    db.prepare(
-      `INSERT INTO crsql_changes ("table", "pk", "cid", "val", "col_version", "db_version", "site_id", "cl", "seq") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    ),
+    db.prepare(/*sql*/ `
+      SELECT "table", "pk", "cid", "val", "col_version", "db_version", "site_id", "cl", "seq" 
+      FROM crsql_changes 
+      WHERE db_version > ? AND site_id IS NULL
+    `),
+    db.prepare(/*sql*/ `
+      INSERT INTO crsql_changes ("table", "pk", "cid", "val", "col_version", "db_version", "site_id", "cl", "seq")
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `),
   ]);
   pullChangesetStmt.raw(true);
   const siteId = (await db.execA<[Uint8Array]>(`SELECT crsql_site_id()`))[0][0];

@@ -1,4 +1,7 @@
-CREATE TABLE IF NOT EXISTS test (id PRIMARY KEY, content TEXT, position);
+CREATE TABLE IF NOT EXISTS test (
+  id PRIMARY KEY,
+  content TEXT,
+  position);
 
 CREATE INDEX IF NOT EXISTS test_position ON test (position);
 SELECT crsql_as_crr('test');
