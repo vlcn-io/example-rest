@@ -78,10 +78,6 @@ table input:focus {
   background: grey;
 } */
 
-table {
-  color: black;
-}
-
 thead {
   font-size: 24px;
 }

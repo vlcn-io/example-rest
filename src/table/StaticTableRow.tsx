@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { Row } from "react-table";
 
 const StyledStaticData = styled.td`
-  background: white;
   &:first-of-type {
     min-width: 20ch;
   }

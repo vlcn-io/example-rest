@@ -5,6 +5,9 @@ const HandleWrapper = styled.div`
   vertical-align: bottom;
   display: inline-block;
   margin-right: 0.5rem;
+  position: relative;
+  top: 2px;
+  float: left;
   svg {
     width: 100%;
     height: 100%;
