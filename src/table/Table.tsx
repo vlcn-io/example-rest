@@ -24,11 +24,9 @@ import { StaticTableRow } from "./StaticTableRow.js";
 export function Table<Data extends { id: UniqueIdentifier }>({
   columns,
   data,
-  setData,
 }: {
   columns: Column<Data>[];
   data: Data[];
-  setData: (d: Data[]) => void;
 }) {
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>();
   // Use the state and functions returned from useTable to build your UI
@@ -50,11 +48,7 @@ export function Table<Data extends { id: UniqueIdentifier }>({
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (active.id !== over?.id) {
-      // setData((data) => {
-      //   const oldIndex = items.indexOf(active.id);
-      //   const newIndex = items.indexOf(over.id);
-      //   return arrayMove(data, oldIndex, newIndex);
-      // });
+      // TODO: insert into our fract view
     }
 
     setActiveId(null);
