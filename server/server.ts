@@ -31,9 +31,9 @@ app.addContentTypeParser(
 
 // If we're in production, serve the static files from the dist folder
 if (process.env.NODE_ENV === "production") {
-  console.log('serving static files');
+  console.log("serving static files");
   await app.register(fastifyStatic, {
-    root: path.join(__dirname, '..', "dist"),
+    root: path.join(__dirname, "..", "dist"),
   });
 } else {
   // If we're not in production, vite is serving our files and the server is accessed
@@ -62,14 +62,22 @@ app.get<{
       BigInt(req.query.schemaVersion as string)
     );
   } catch (e: any) {
-    if (e.code === "SQLITE_IOERR_WRITE" || e.message?.includes("readonly database")) {
-      res.status(400).send("make and push changes first to create or migrate the DB on the server.");
+    if (
+      e.code === "SQLITE_IOERR_WRITE" ||
+      e.message?.includes("readonly database")
+    ) {
+      res
+        .status(400)
+        .send({
+          message:
+            "make and push changes first to create or migrate the DB on the server.",
+        });
       return;
     }
-    
+
     throw e;
   }
-  
+
   try {
     const requestorSiteId = hexToBytes(req.query.requestor as string);
     const sinceVersion = BigInt(req.query.since as string);

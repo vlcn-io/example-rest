@@ -1,4 +1,3 @@
-import { CtxAsync, useCachedState } from "@vlcn.io/react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import vlcnLogo from "./assets/vlcn.png";
@@ -16,14 +15,14 @@ import { newIID } from "@vlcn.io/id";
 TimeAgo.addDefaultLocale(en);
 
 const wordOptions = { exactly: 3, join: " " };
-const editableColumns = new Set(["name"]);
+const editableColumns = new Set(["content"]);
 
 function App({ room }: { room: string }) {
   const ctx = useDB(room);
   const syncer = useSyncer(ctx.db, room);
 
   const addData = () => {
-    ctx.db.exec("INSERT INTO test (id, name, position) VALUES (?, ?, -1);", [
+    ctx.db.exec("INSERT INTO test (id, content, position) VALUES (?, ?, -1);", [
       newIID(ctx.db.siteid),
       randomWords(wordOptions) as string,
     ]);

@@ -56,7 +56,7 @@ export default function DynamicTable({
   ).data;
 
   const columns: Column<any>[] = useMemo(() => {
-    return tableInfo.map((info) => {
+    const ret = tableInfo.map((info) => {
       return {
         Header: info.name,
         Cell: ({ cell }) => {
@@ -67,6 +67,7 @@ export default function DynamicTable({
             return (
               <EditableItem
                 ctx={ctx}
+                name={info.name}
                 id={(cell.row.original as any).id}
                 value={(cell.row.original as any)[info.name]}
               />
@@ -76,6 +77,24 @@ export default function DynamicTable({
         },
       } satisfies Column;
     });
+    ret.push({
+      Header: "Action",
+      Cell: ({ cell }) => {
+        return (
+          <div
+            onClick={() =>
+              ctx.db.exec(`DELETE FROM ${tableName} WHERE id = ?`, [
+                (cell.row.original as any).id,
+              ])
+            }
+            style={{ cursor: "pointer" }}
+          >
+            ❌
+          </div>
+        );
+      },
+    });
+    return ret;
   }, [tableInfo]);
 
   return (
@@ -89,10 +108,12 @@ function EditableItem({
   ctx,
   id,
   value,
+  name,
 }: {
   ctx: CtxAsync;
   id: string | bigint;
   value: string;
+  name: string;
 }) {
   // Generally you will not need to use `useCachedState`. It is only required for highly interactive components
   // that write to the database on every interaction (e.g., keystroke or drag) or in cases where you want
@@ -105,7 +126,7 @@ function EditableItem({
   const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setCachedValue(e.target.value);
     // You could de-bounce your write to the DB here if so desired.
-    return ctx.db.exec("UPDATE test SET name = ? WHERE id = ?;", [
+    return ctx.db.exec(`UPDATE test SET [${name}] = ? WHERE id = ?;`, [
       e.target.value,
       id,
     ]);
@@ -116,7 +137,7 @@ function EditableItem({
       type="text"
       value={cachedValue}
       onChange={onChange}
-      style={{ fontSize: "1em" }}
+      style={{ fontSize: "1em", padding: 5 }}
     />
   );
 }
