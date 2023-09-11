@@ -24,26 +24,26 @@ dependencies:
     specifier: ^6.11.0
     version: 6.11.0
   '@vlcn.io/crsqlite':
-    specifier: 0.15.0
-    version: 0.15.0
+    specifier: 0.15.1-next.0
+    version: 0.15.1-next.0
   '@vlcn.io/crsqlite-wasm':
-    specifier: link:../js/packages/crsqlite-wasm
-    version: link:../js/packages/crsqlite-wasm
+    specifier: 0.15.2-next.0
+    version: 0.15.2-next.0
   '@vlcn.io/id':
     specifier: link:../js/packages/id
     version: link:../js/packages/id
   '@vlcn.io/react':
-    specifier: link:../js/packages/react
-    version: link:../js/packages/react
+    specifier: 3.0.3-next.2
+    version: 3.0.3-next.2(react@18.2.0)
   '@vlcn.io/rx-tbl':
-    specifier: link:../js/packages/rx-tbl
-    version: link:../js/packages/rx-tbl
+    specifier: 0.14.1
+    version: 0.14.1
   '@vlcn.io/ws-common':
-    specifier: link:../js/packages/ws-common
-    version: link:../js/packages/ws-common
+    specifier: 0.1.2-next.0
+    version: 0.1.2-next.0
   '@vlcn.io/xplat-api':
-    specifier: link:../js/packages/xplat-api
-    version: link:../js/packages/xplat-api
+    specifier: 0.14.1
+    version: 0.14.1
   better-sqlite3:
     specifier: ^8.3.0
     version: 8.3.0
@@ -1933,6 +1933,10 @@ packages:
     resolution: {integrity: sha512-n4sx2bqL0mW1tvDf/loQ+aMX7GQD3lc3fkCMC55VFNDu/vBOabO+LTIeXKM14xK0ppk5TUGcWRjiSpIlUpghKw==}
     dev: false
 
+  /@types/throttle-debounce@5.0.0:
+    resolution: {integrity: sha512-Pb7k35iCGFcGPECoNE4DYp3Oyf2xcTd3FbFQxXUI9hEYKUl6YX+KLf7HrBmgVcD05nl50LIH6i+80js4iYmWbw==}
+    dev: false
+
   /@typescript-eslint/eslint-plugin@5.57.1(@typescript-eslint/parser@5.57.1)(eslint@8.38.0)(typescript@5.0.2):
     resolution: {integrity: sha512-1MeobQkQ9tztuleT3v72XmY0XuKXVXusAhryoLuU5YZ+mXoYKZP9SQ7Flulh1NX4DTjpGTc2b/eMu4u7M7dhnQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -2078,9 +2082,64 @@ packages:
       - supports-color
     dev: true
 
-  /@vlcn.io/crsqlite@0.15.0:
-    resolution: {integrity: sha512-x76W0L9I152SrABbvxFQ/5zOpFNi2YSH7WTGMLFHclcutWiigP7uwXNrPEIpAp4dMhlFJAj2Ge2IbcJX87XdJQ==}
+  /@vlcn.io/crsqlite-wasm@0.15.2-next.0:
+    resolution: {integrity: sha512-1icZoN0AntglX7Eq0esPdxTas6W8P6YNWaPyi0rmFQP1/vxDIQc08XqesvB0rPa5ADDS2d8F5QjIkxroCM+GhQ==}
+    dependencies:
+      '@vlcn.io/wa-sqlite': 0.21.0
+      '@vlcn.io/xplat-api': 0.14.1
+      async-mutex: 0.4.0
+    dev: false
+
+  /@vlcn.io/crsqlite@0.15.1-next.0:
+    resolution: {integrity: sha512-zYLEEkYUpNQ1ohNDT4tCfPOU3LzCzuoPtGmPUfMWeFqlbBhYPRR6jjuuqyFbd2b7P68UlTSxDTFcXB0Skacf8Q==}
     requiresBuild: true
+    dev: false
+
+  /@vlcn.io/react@3.0.3-next.2(react@18.2.0):
+    resolution: {integrity: sha512-PKraFbq8DplvunAVaDbd7CAUWVDF697cPWSz+HvB/3rpBUbMdKO5oVkzamwmYGfjhVTI5ZEM98GI9BNrdBi7Ag==}
+    peerDependencies:
+      react: ^18
+    dependencies:
+      '@vlcn.io/crsqlite-wasm': 0.15.2-next.0
+      '@vlcn.io/rx-tbl': 0.14.1
+      '@vlcn.io/typed-sql': 0.2.13
+      '@vlcn.io/ws-client': 0.1.2-next.1
+      '@vlcn.io/xplat-api': 0.14.1
+      async-mutex: 0.4.0
+      react: 18.2.0
+    dev: false
+
+  /@vlcn.io/rx-tbl@0.14.1:
+    resolution: {integrity: sha512-sUDMzZR0SWSUOSUOZ+raTSVTQXlN/z0Gk4A0Kol6gMfhnZCJW5hu5wMOjGu2EMR+wWdDVJTfvRsw47Nz10Kb8A==}
+    dependencies:
+      '@vlcn.io/xplat-api': 0.14.1
+    dev: false
+
+  /@vlcn.io/typed-sql@0.2.13:
+    resolution: {integrity: sha512-gPwhZ4nmkA9+S5gUGJ5DH/O9EKDXroSB0LiF7nBXtAluISwrb/h+VI6FQY8Pc8TBQcLYbCKHDIF2rWXaFWPrig==}
+    dev: false
+
+  /@vlcn.io/wa-sqlite@0.21.0:
+    resolution: {integrity: sha512-aCeTGIGyi+HOv8wzJQ8n4lG9XqjjBEKVAPLXq/dekW6AM/x0ITA5vAQ7YUhpn9xNq3U1cp5DPIX+vzMkpsRNww==}
+    dev: false
+
+  /@vlcn.io/ws-client@0.1.2-next.1:
+    resolution: {integrity: sha512-B5/COoAHgGh4wGR/cupb8FOv6MKyON43OnS++sTNK8Sxz0v3achOf7pcwfBVPVvpAAB/xLR6uihXL3yYXeKbRA==}
+    dependencies:
+      '@types/throttle-debounce': 5.0.0
+      '@vlcn.io/ws-common': 0.1.2-next.0
+    dev: false
+
+  /@vlcn.io/ws-common@0.1.2-next.0:
+    resolution: {integrity: sha512-p7B+Fyy9MI04ibwbKSa1HLiopsp2Xvrvx3KSHoSEvXjuw/3dmXJSt4RS2eRudubzceg788ApAWDF7aAcVKjgAw==}
+    dependencies:
+      lib0: 0.2.83
+    dev: false
+
+  /@vlcn.io/xplat-api@0.14.1:
+    resolution: {integrity: sha512-Y63WDk0kkt6i1WzlD6StiFXXHP+YJaDO/SW0S9+dyoEZDvkDLHr1HrKsfBn1JreBnbCd5fOhm/gRP49m1Ksfhg==}
+    dependencies:
+      comlink: 4.4.1
     dev: false
 
   /abort-controller@3.0.0:
@@ -2176,6 +2235,12 @@ packages:
     resolution: {integrity: sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==}
     engines: {node: '>=8'}
     dev: true
+
+  /async-mutex@0.4.0:
+    resolution: {integrity: sha512-eJFZ1YhRR8UN8eBLoNzcDPcy/jqjsg6I1AP+KvWQX80BqOSW1oJPJXDylPUEeMr2ZQvHgnQ//Lp6f3RQ1zI7HA==}
+    dependencies:
+      tslib: 2.6.2
+    dev: false
 
   /atomic-sleep@1.0.0:
     resolution: {integrity: sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==}
@@ -2377,6 +2442,10 @@ packages:
   /color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
     dev: true
+
+  /comlink@4.4.1:
+    resolution: {integrity: sha512-+1dlx0aY5Jo1vHy/tSsIGpSkN4tS9rZSW8FIhG0JH/crs9wwweswIo/POr451r7bZww3hFbPAKnTpimzL/mm4Q==}
+    dev: false
 
   /commander@4.1.1:
     resolution: {integrity: sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==}
@@ -3035,6 +3104,10 @@ packages:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
     dev: true
 
+  /isomorphic.js@0.2.5:
+    resolution: {integrity: sha512-PIeMbHqMt4DnUP3MA/Flc0HElYjMXArsw1qwJZcm9sqR8mq3l8NYizFMty0pWwE/tzIGH3EKK5+jes5mAr85yw==}
+    dev: false
+
   /javascript-time-ago@2.5.9:
     resolution: {integrity: sha512-pQ8mNco/9g9TqWXWWjP0EWl6i/lAQScOyEeXy5AB+f7MfLSdgyV9BJhiOD1zrIac/lrxPYOWNbyl/IW8CW5n0A==}
     dependencies:
@@ -3099,6 +3172,14 @@ packages:
       prelude-ls: 1.2.1
       type-check: 0.4.0
     dev: true
+
+  /lib0@0.2.83:
+    resolution: {integrity: sha512-O72x2MGVOG3TwQ1aXXkk1Ebb438OrxyQcg60oiWRm66U9uCnE12fDfO+NlQ43OVQkgNLvw2hzHYxkp76YLSxRw==}
+    engines: {node: '>=16'}
+    hasBin: true
+    dependencies:
+      isomorphic.js: 0.2.5
+    dev: false
 
   /light-my-request@5.10.0:
     resolution: {integrity: sha512-ZU2D9GmAcOUculTTdH9/zryej6n8TzT+fNGdNtm6SDp5MMMpHrJJkvAdE3c6d8d2chE9i+a//dS9CWZtisknqA==}
