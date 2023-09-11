@@ -1,6 +1,6 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { DragHandle } from "./DragHandle.ts";
+import { DragHandle } from "./DragHandle";
 import { Row } from "react-table";
 import { UniqueIdentifier } from "@dnd-kit/core";
 import styled from "styled-components";

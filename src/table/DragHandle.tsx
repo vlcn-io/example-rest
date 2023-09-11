@@ -9,10 +9,14 @@ const HandleWrapper = styled.div`
     width: 100%;
     height: 100%;
   }
-  cursor: ${({ isDragging }) => (isDragging ? "grabbing" : "grab")};
+  cursor: ${
+    // @ts-ignore
+    ({ isDragging }: { isDragging?: boolean }) =>
+      isDragging ? "grabbing" : "grab"
+  };
 `;
 
-export const DragHandle = (props) => {
+export const DragHandle = (props: { isDragging?: boolean }) => {
   return (
     <HandleWrapper {...props}>
       <svg

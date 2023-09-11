@@ -29,6 +29,9 @@ dependencies:
   '@vlcn.io/crsqlite-wasm':
     specifier: link:../js/packages/crsqlite-wasm
     version: link:../js/packages/crsqlite-wasm
+  '@vlcn.io/id':
+    specifier: link:../js/packages/id
+    version: link:../js/packages/id
   '@vlcn.io/react':
     specifier: link:../js/packages/react
     version: link:../js/packages/react

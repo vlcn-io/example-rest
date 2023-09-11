@@ -56,7 +56,13 @@ export default function DynamicTable({
     return tableInfo.map((info) => {
       return {
         Header: info.name,
-        accessor: info.name,
+        Cell: ({ cell }) => {
+          if (info.name === "id") {
+            const idstr = (cell.row.original as any).id.toString();
+            return "..." + idstr.substring(idstr.length - 5);
+          }
+          return (cell.row.original as any)[info.name]?.toString();
+        },
       } satisfies Column;
     });
   }, [tableInfo]);

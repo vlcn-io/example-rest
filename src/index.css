@@ -55,7 +55,7 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-table {
+/* table {
   border-collapse: collapse;
   border-spacing: 0;
   width: 100%;
@@ -76,6 +76,10 @@ table input {
 
 table input:focus {
   background: grey;
+} */
+
+table {
+  color: black;
 }
 
 thead {

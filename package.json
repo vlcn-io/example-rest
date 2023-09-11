@@ -23,6 +23,7 @@
     "@vlcn.io/rx-tbl": "link:../js/packages/rx-tbl",
     "@vlcn.io/ws-common": "link:../js/packages/ws-common",
     "@vlcn.io/xplat-api": "link:../js/packages/xplat-api",
+    "@vlcn.io/id": "link:../js/packages/id",
     "better-sqlite3": "^8.3.0",
     "fastify": "^4.22.2",
     "fastify-plugin": "^4.5.1",

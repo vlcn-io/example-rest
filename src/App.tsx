@@ -1,4 +1,4 @@
-import { CtxAsync, useCachedState, useQuery } from "@vlcn.io/react";
+import { CtxAsync, useCachedState } from "@vlcn.io/react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import vlcnLogo from "./assets/vlcn.png";
@@ -10,22 +10,20 @@ import { useState } from "react";
 import TimeAgo from "javascript-time-ago";
 import ReactTimeAgo from "react-time-ago";
 import en from "javascript-time-ago/locale/en.json";
+import DynamicTable from "./table/DynamicTable.js";
+import { newIID } from "@vlcn.io/id";
+
 TimeAgo.addDefaultLocale(en);
 
-type TestRecord = { id: string; name: string };
 const wordOptions = { exactly: 3, join: " " };
 
 function App({ room }: { room: string }) {
   const ctx = useDB(room);
   const syncer = useSyncer(ctx.db, room);
-  const data = useQuery<TestRecord>(
-    ctx,
-    "SELECT * FROM test ORDER BY id DESC"
-  ).data;
 
   const addData = () => {
     ctx.db.exec("INSERT INTO test (id, name) VALUES (?, ?);", [
-      nanoid(10),
+      newIID(ctx.db.siteid),
       randomWords(wordOptions) as string,
     ]);
   };
@@ -79,24 +77,7 @@ function App({ room }: { room: string }) {
           </button>
           <button onClick={dropData}>Drop Data</button>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row) => (
-              <tr key={row.id}>
-                <td>{row.id}</td>
-                <td>
-                  <EditableItem ctx={ctx} id={row.id} value={row.name} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <DynamicTable room={room} tableName="test" />
         <div className="push-pull">
           <div>
             <button
@@ -113,13 +94,13 @@ function App({ room }: { room: string }) {
           <div className="push-pull-msg">
             {pushPullMsg}
             <div>
-            {pushPullTime ? (
-              <ReactTimeAgo
-                date={pushPullTime}
-                locale="en-US"
-                timeStyle="round"
-              />
-            ) : null}
+              {pushPullTime ? (
+                <ReactTimeAgo
+                  date={pushPullTime}
+                  locale="en-US"
+                  timeStyle="round"
+                />
+              ) : null}
             </div>
           </div>
         </div>
