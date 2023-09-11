@@ -1,4 +1,4 @@
-import { useDB, useQuery } from "@vlcn.io/react";
+import { CtxAsync, useCachedState, useDB, useQuery } from "@vlcn.io/react";
 import { useMemo } from "react";
 import styled from "styled-components";
 import { Table } from "./Table.js";
@@ -38,9 +38,11 @@ const Styles = styled.div`
 export default function DynamicTable({
   tableName,
   room,
+  editable,
 }: {
   tableName: string;
   room: string;
+  editable: Set<string>;
 }) {
   const ctx = useDB(room);
   const tableInfo = useQuery<{ name: string }>(
@@ -61,6 +63,14 @@ export default function DynamicTable({
           if (info.name === "id") {
             const idstr = (cell.row.original as any).id.toString();
             return "..." + idstr.substring(idstr.length - 5);
+          } else if (editable.has(info.name)) {
+            return (
+              <EditableItem
+                ctx={ctx}
+                id={(cell.row.original as any).id}
+                value={(cell.row.original as any)[info.name]}
+              />
+            );
           }
           return (cell.row.original as any)[info.name]?.toString();
         },
@@ -72,5 +82,41 @@ export default function DynamicTable({
     <Styles>
       <Table columns={columns} data={data} ctx={ctx} />
     </Styles>
+  );
+}
+
+function EditableItem({
+  ctx,
+  id,
+  value,
+}: {
+  ctx: CtxAsync;
+  id: string | bigint;
+  value: string;
+}) {
+  // Generally you will not need to use `useCachedState`. It is only required for highly interactive components
+  // that write to the database on every interaction (e.g., keystroke or drag) or in cases where you want
+  // to de-bounce your writes to the DB.
+  //
+  // `useCachedState` will never be required once when one of the following is true:
+  // a. We complete the synchronous Reactive SQL layer (SQLiteRX)
+  // b. We figure out how to get SQLite-WASM to do a write + read round-trip in a single event loop tick
+  const [cachedValue, setCachedValue] = useCachedState(value);
+  const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCachedValue(e.target.value);
+    // You could de-bounce your write to the DB here if so desired.
+    return ctx.db.exec("UPDATE test SET name = ? WHERE id = ?;", [
+      e.target.value,
+      id,
+    ]);
+  };
+
+  return (
+    <input
+      type="text"
+      value={cachedValue}
+      onChange={onChange}
+      style={{ fontSize: "1em" }}
+    />
   );
 }

@@ -16,6 +16,7 @@ import { newIID } from "@vlcn.io/id";
 TimeAgo.addDefaultLocale(en);
 
 const wordOptions = { exactly: 3, join: " " };
+const editableColumns = new Set(["name"]);
 
 function App({ room }: { room: string }) {
   const ctx = useDB(room);
@@ -77,7 +78,7 @@ function App({ room }: { room: string }) {
           </button>
           <button onClick={dropData}>Drop Data</button>
         </div>
-        <DynamicTable room={room} tableName="test" />
+        <DynamicTable room={room} tableName="test" editable={editableColumns} />
         <div className="push-pull">
           <div>
             <button
@@ -122,49 +123,4 @@ function App({ room }: { room: string }) {
   );
 }
 
-function EditableItem({
-  ctx,
-  id,
-  value,
-}: {
-  ctx: CtxAsync;
-  id: string;
-  value: string;
-}) {
-  // Generally you will not need to use `useCachedState`. It is only required for highly interactive components
-  // that write to the database on every interaction (e.g., keystroke or drag) or in cases where you want
-  // to de-bounce your writes to the DB.
-  //
-  // `useCachedState` will never be required once when one of the following is true:
-  // a. We complete the synchronous Reactive SQL layer (SQLiteRX)
-  // b. We figure out how to get SQLite-WASM to do a write + read round-trip in a single event loop tick
-  const [cachedValue, setCachedValue] = useCachedState(value);
-  const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCachedValue(e.target.value);
-    // You could de-bounce your write to the DB here if so desired.
-    return ctx.db.exec("UPDATE test SET name = ? WHERE id = ?;", [
-      e.target.value,
-      id,
-    ]);
-  };
-
-  return <input type="text" value={cachedValue} onChange={onChange} />;
-}
-
 export default App;
-
-const nanoid = (t = 21) =>
-  crypto
-    .getRandomValues(new Uint8Array(t))
-    .reduce(
-      (t, e) =>
-        (t +=
-          (e &= 63) < 36
-            ? e.toString(36)
-            : e < 62
-            ? (e - 26).toString(36).toUpperCase()
-            : e > 62
-            ? "-"
-            : "_"),
-      ""
-    );
