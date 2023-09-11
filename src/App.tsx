@@ -22,7 +22,7 @@ function App({ room }: { room: string }) {
   const syncer = useSyncer(ctx.db, room);
 
   const addData = () => {
-    ctx.db.exec("INSERT INTO test (id, name) VALUES (?, ?);", [
+    ctx.db.exec("INSERT INTO test (id, name, position) VALUES (?, ?, -1);", [
       newIID(ctx.db.siteid),
       randomWords(wordOptions) as string,
     ]);

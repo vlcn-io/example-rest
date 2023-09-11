@@ -20,13 +20,16 @@ import {
 import { Column, useTable } from "react-table";
 import { DraggableTableRow } from "./DraggableTableRow.js";
 import { StaticTableRow } from "./StaticTableRow.js";
+import { CtxAsync } from "@vlcn.io/react";
 
 export function Table<Data extends { id: UniqueIdentifier }>({
   columns,
   data,
+  ctx,
 }: {
   columns: Column<Data>[];
   data: Data[];
+  ctx: CtxAsync;
 }) {
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>();
   // Use the state and functions returned from useTable to build your UI
@@ -48,7 +51,11 @@ export function Table<Data extends { id: UniqueIdentifier }>({
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (active.id !== over?.id) {
-      // TODO: insert into our fract view
+      // TODO: before_id
+      ctx.db.exec(`UPDATE test_fractindex SET after_id = ? WHERE id = ?`, [
+        over?.id,
+        active.id,
+      ]);
     }
 
     setActiveId(null);
@@ -99,7 +106,7 @@ export function Table<Data extends { id: UniqueIdentifier }>({
           </SortableContext>
         </tbody>
       </table>
-      <DragOverlay>
+      <DragOverlay dropAnimation={null}>
         {activeId && (
           <table style={{ width: "100%" }}>
             <tbody>

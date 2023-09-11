@@ -49,7 +49,7 @@ export default function DynamicTable({
   ).data;
   const data = useQuery<{ id: UniqueIdentifier }>(
     ctx,
-    `SELECT * FROM ${tableName} ORDER BY id DESC`
+    `SELECT * FROM ${tableName} ORDER BY position ASC`
   ).data;
 
   const columns: Column<any>[] = useMemo(() => {
@@ -69,7 +69,7 @@ export default function DynamicTable({
 
   return (
     <Styles>
-      <Table columns={columns} data={data} />
+      <Table columns={columns} data={data} ctx={ctx} />
     </Styles>
   );
 }
