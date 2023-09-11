@@ -23,7 +23,7 @@
     "@vlcn.io/rx-tbl": "0.14.1",
     "@vlcn.io/ws-common": "0.1.2-next.0",
     "@vlcn.io/xplat-api": "0.14.1",
-    "@vlcn.io/id": "link:../js/packages/id",
+    "@vlcn.io/id": "0.0.3",
     "better-sqlite3": "^8.3.0",
     "fastify": "^4.22.2",
     "fastify-plugin": "^4.5.1",

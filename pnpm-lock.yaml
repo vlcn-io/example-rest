@@ -30,8 +30,8 @@ dependencies:
     specifier: 0.15.2-next.0
     version: 0.15.2-next.0
   '@vlcn.io/id':
-    specifier: link:../js/packages/id
-    version: link:../js/packages/id
+    specifier: 0.0.3
+    version: 0.0.3(react@18.2.0)
   '@vlcn.io/react':
     specifier: 3.0.3-next.2
     version: 3.0.3-next.2(react@18.2.0)
@@ -2093,6 +2093,14 @@ packages:
   /@vlcn.io/crsqlite@0.15.1-next.0:
     resolution: {integrity: sha512-zYLEEkYUpNQ1ohNDT4tCfPOU3LzCzuoPtGmPUfMWeFqlbBhYPRR6jjuuqyFbd2b7P68UlTSxDTFcXB0Skacf8Q==}
     requiresBuild: true
+    dev: false
+
+  /@vlcn.io/id@0.0.3(react@18.2.0):
+    resolution: {integrity: sha512-SzhB0pSQSOEfqkKaoALDDVTS2aq+zpn6aL+d2s5r1CYx5W3UTJwstJo1bfmliUNBChHuvLhCAHJ0k/R4UWPVHA==}
+    peerDependencies:
+      react: ^18
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /@vlcn.io/react@3.0.3-next.2(react@18.2.0):
