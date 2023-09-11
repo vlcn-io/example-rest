@@ -51,9 +51,17 @@ export function Table<Data extends { id: UniqueIdentifier }>({
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (active.id !== over?.id) {
-      // TODO: before_id
+      // TODO: crsql only exposes an `after_id` function for re-ordering. We should add a `before_id` as well.
+      const currIndex =
+        over?.id == null
+          ? null
+          : data.findIndex((d) => {
+              return d.id === over.id;
+            });
+      const afterId =
+        currIndex == null || currIndex <= 0 ? null : data[currIndex - 1].id;
       ctx.db.exec(`UPDATE test_fractindex SET after_id = ? WHERE id = ?`, [
-        over?.id,
+        afterId,
         active.id,
       ]);
     }
