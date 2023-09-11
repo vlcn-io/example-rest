@@ -3,7 +3,7 @@ import viteLogo from "/vite.svg";
 import vlcnLogo from "./assets/vlcn.png";
 import "./App.css";
 import randomWords from "./support/randomWords.js";
-import { useDB } from "@vlcn.io/react";
+import { first, useCachedState, useDB, useQuery } from "@vlcn.io/react";
 import { useSyncer } from "./Syncer.js";
 import { useState } from "react";
 import TimeAgo from "javascript-time-ago";
@@ -56,6 +56,17 @@ function App({ room }: { room: string }) {
     }
   };
 
+  const localNotes = first(
+    useQuery<{ content: string | null }>(
+      ctx,
+      `SELECT content FROM local_notes WHERE id = 1`
+    ).data
+  ) ?? { content: "" };
+
+  const [cachedLocalNotes, setCachedLocalNotes] = useCachedState(
+    localNotes.content || ""
+  );
+
   return (
     <>
       <div>
@@ -78,6 +89,18 @@ function App({ room }: { room: string }) {
           <button onClick={dropData}>Drop Data</button>
         </div>
         <DynamicTable room={room} tableName="test" editable={editableColumns} />
+        <textarea
+          value={cachedLocalNotes}
+          placeholder="Local notes"
+          style={{ width: "100%", height: 100 }}
+          onChange={(e) => {
+            setCachedLocalNotes(e.target.value);
+            return ctx.db.exec(
+              `INSERT OR REPLACE INTO local_notes VALUES (1, ?)`,
+              [e.target.value]
+            );
+          }}
+        />
         <div className="push-pull">
           <div>
             <button

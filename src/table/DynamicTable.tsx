@@ -9,6 +9,7 @@ const Styles = styled.div`
   padding: 1rem;
 
   table {
+    width: 100%;
     border-spacing: 0;
     border-top: 1px solid black;
     border-left: 1px solid black;
