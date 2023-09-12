@@ -2,6 +2,8 @@
 
 [Live example - https://vlcn-rest-litefs.fly.dev](https://vlcn-rest-litefs.fly.dev/)
 
+[[video] Using SQLite as a Collaborative Application File Format](https://www.youtube.com/watch?v=T1ES9x8DKR4)
+
 Running locally:
 
 ```shell
