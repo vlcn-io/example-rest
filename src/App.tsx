@@ -10,7 +10,7 @@ import TimeAgo from "javascript-time-ago";
 import ReactTimeAgo from "react-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import DynamicTable from "./table/DynamicTable.js";
-import { newIID } from "@vlcn.io/id";
+import { newId } from "@vlcn.io/id";
 
 TimeAgo.addDefaultLocale(en);
 
@@ -23,7 +23,7 @@ function App({ room }: { room: string }) {
 
   const addData = () => {
     ctx.db.exec("INSERT INTO test (id, content, position) VALUES (?, ?, -1);", [
-      newIID(ctx.db.siteid),
+      newId(ctx.db.siteid, "decimal"),
       randomWords(wordOptions) as string,
     ]);
   };

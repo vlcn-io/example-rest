@@ -166,7 +166,7 @@ export default async function createSyncer(
     db.prepare(/*sql*/ `
       SELECT "table", "pk", "cid", "val", "col_version", "db_version", "site_id", "cl", "seq" 
       FROM crsql_changes 
-      WHERE db_version > ? AND site_id IS NULL
+      WHERE db_version > ? AND site_id = crsql_site_id()
     `),
     db.prepare(/*sql*/ `
       INSERT INTO crsql_changes ("table", "pk", "cid", "val", "col_version", "db_version", "site_id", "cl", "seq")

@@ -30,7 +30,7 @@ The server has one endpoint: `/changes/:room` which can be called via `get` or `
 **Query Parameters:**
 
 1. **schemaName** - The name of the schema that the database should have. If the DB exists, the schema name must match what the client provided. If the DB does not exist, it will be created on the first call to `post /changes/:room`.
-2. **schemaVersion** - The schema version we expect the server to have. If client and server are on different versions no changes will be returned. Posting to `/changes:room` will attempt to migrate the server and client to the same schema version. Filled in by the client library. 
+2. **schemaVersion** - The schema version we expect the server to have. If client and server are on different versions no changes will be returned. Posting to `/changes:room` will attempt to migrate the server and client to the same schema version. Filled in by the client library.
 3. **requestor** - The identifier of the client requesting changes. Filled in by the client library.
 4. **since** - Used to fetch incremental changes. I.e., "give me changes _since_ this database version"
 
@@ -85,7 +85,6 @@ It's about ~150 lines but there are only 4 key points:
 3. A select changesets statement
 4. An insert changesets statement
 
-
 ### Last Sent To State
 
 Every change to a `cr-sqlite` database increases the version number of that database by 1. This allows syncing deltas.
@@ -104,11 +103,11 @@ The select changesets statement is used to pull what has changed from the DB.
 
 ```sql
 SELECT
-  "table", "pk", "cid", "val", "col_version", "db_version", COALESCE("site_id", crsql_site_id()), "cl", "seq"
-FROM crsql_changes WHERE db_version > ? AND site_id IS NULL
+  "table", "pk", "cid", "val", "col_version", "db_version", "site_id", "cl", "seq"
+FROM crsql_changes WHERE db_version > ? AND site_id = crsqlite_site_id()
 ```
 
-- The `site_id IS NULL` check ensure we only grab local updates from the database
+- The `site_id = crsqlite_site_id()` check ensure we only grab local updates from the database
 - The `db_version > ?` ensures we only pull a delta from the database
 
 ### Insert Changes Statement
